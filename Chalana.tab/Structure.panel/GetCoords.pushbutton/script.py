@@ -1,7 +1,7 @@
-"""UpdateCoords
-Updates coordinates of foundations and columns."""
+"""GetCoords
+Gets coordinates of foundations and columns."""
 
-__title__ = "UpdateCoords"
+__title__ = "GetCoords"
 __author__ = "Chalana"
 
 import os
@@ -333,7 +333,7 @@ def process_elements(selected_founds, selected_cols, is_survey_point, is_meters)
                 
         t.Commit()
         
-        msg = "Successfully updated coordinates for {} elements.".format(count)
+        msg = "Successfully retrieved coordinates for {} elements.".format(count)
         if skipped_no_pt > 0:
             msg += "\nSkipped {} elements with no geometry/location.".format(skipped_no_pt)
         if skipped_no_param > 0:
