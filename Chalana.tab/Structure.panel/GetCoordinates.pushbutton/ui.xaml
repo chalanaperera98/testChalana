@@ -215,7 +215,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                    <TextBlock Text="Get Coordinates" Foreground="White" FontSize="18" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <TextBlock Text="Get Coordinates v1.1" Foreground="White" FontSize="18" FontWeight="Bold" Margin="0,0,0,5"/>
                     <TextBlock Text="Select foundations and columns to calculate coordinates." Foreground="#888888" FontSize="12"/>
                 </StackPanel>
                 <Image x:Name="LogoImage" Grid.Column="1" Width="80" Height="80" Margin="10,0,0,0" Stretch="Uniform" HorizontalAlignment="Right" VerticalAlignment="Center"/>
