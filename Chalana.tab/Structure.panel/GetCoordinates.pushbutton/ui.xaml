@@ -172,30 +172,9 @@
             </Grid.ColumnDefinitions>
             
             <Image Grid.Column="0" Source="icon.png" Width="16" Height="16" Margin="10,0,5,0" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="1" Text="Get Coordinates Configuration v1.2" Foreground="#BBBBBB" FontSize="11" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <TextBlock Grid.Column="1" Text="Get Coordinates Configuration" Foreground="#BBBBBB" FontSize="12" VerticalAlignment="Center" Margin="5,0,0,0"/>
             
-            <StackPanel Grid.Column="2" Orientation="Horizontal">
-                <Button x:Name="UpdateBtn" Content="↻ Update" Width="70" Height="24" Margin="0,0,10,0" Background="#333333" Foreground="#FFFFFF" BorderThickness="0" Cursor="Hand" Click="UpdateBtn_Click">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}" CornerRadius="3">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#802F2D"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-                <Button x:Name="CloseBtn" Content="✕" Width="45" Height="32" Background="Transparent" Foreground="#888888" BorderThickness="0" Click="CancelButton_Click">
+            <Button Grid.Column="2" x:Name="CloseBtn" Content="✕" Width="45" Height="32" Background="Transparent" Foreground="#888888" BorderThickness="0" Click="CancelButton_Click">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Setter Property="Template">
@@ -216,8 +195,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-        </StackPanel>
-    </Grid>
+        </Grid>
 
         <!-- MAIN CONTENT AREA -->
         <Grid Grid.Row="1" Margin="15">
@@ -237,7 +215,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                    <TextBlock Text="Get Coordinates v1.2" Foreground="White" FontSize="18" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <TextBlock Text="Get Coordinates" Foreground="White" FontSize="18" FontWeight="Bold" Margin="0,0,0,5"/>
                     <TextBlock Text="Select foundations and columns to calculate coordinates." Foreground="#888888" FontSize="12"/>
                 </StackPanel>
                 <Image x:Name="LogoImage" Grid.Column="1" Width="80" Height="80" Margin="10,0,0,0" Stretch="Uniform" HorizontalAlignment="Right" VerticalAlignment="Center"/>
