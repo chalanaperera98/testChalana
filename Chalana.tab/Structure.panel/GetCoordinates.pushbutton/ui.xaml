@@ -215,7 +215,7 @@
                         </Style.Triggers>
                     </Style>
                 </Button.Style>
-            </Button>
+            </StackPanel>
         </Grid>
 
         <!-- MAIN CONTENT AREA -->
