@@ -37,12 +37,12 @@ class CoordinateOptionsForm(WPFWindow):
         self.units_combo = self.FindName("UnitsCombo")
         # Bind the Update button
         try:
-            self.UpdateBtn = self.window.FindName("UpdateBtn")
+            self.UpdateBtn = self.FindName("UpdateBtn")
             self.UpdateBtn.Click += self.UpdateBtn_Click
         except:
             pass
             
-        self.logo_img = self.window.FindName("LogoImage")
+        self.logo_img = self.FindName("LogoImage")
 
         # Determine available Family Types in the model
         foundation_instances = DB.FilteredElementCollector(revit.doc).OfCategory(DB.BuiltInCategory.OST_StructuralFoundation).WhereElementIsNotElementType().ToElements()
