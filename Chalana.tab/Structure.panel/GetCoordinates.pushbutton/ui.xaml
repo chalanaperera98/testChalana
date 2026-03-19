@@ -215,8 +215,9 @@
                         </Style.Triggers>
                     </Style>
                 </Button.Style>
-            </StackPanel>
-        </Grid>
+            </Button>
+        </StackPanel>
+    </Grid>
 
         <!-- MAIN CONTENT AREA -->
         <Grid Grid.Row="1" Margin="15">
