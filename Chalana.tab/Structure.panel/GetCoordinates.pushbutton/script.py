@@ -35,7 +35,14 @@ class CoordinateOptionsForm(WPFWindow):
         self.column_list = self.FindName("ColumnList")
         self.coord_combo = self.FindName("CoordSystemCombo")
         self.units_combo = self.FindName("UnitsCombo")
-        self.logo_img = self.FindName("LogoImage")
+        # Bind the Update button
+        try:
+            self.UpdateBtn = self.window.FindName("UpdateBtn")
+            self.UpdateBtn.Click += self.UpdateBtn_Click
+        except:
+            pass
+            
+        self.logo_img = self.window.FindName("LogoImage")
 
         # Determine available Family Types in the model
         foundation_instances = DB.FilteredElementCollector(revit.doc).OfCategory(DB.BuiltInCategory.OST_StructuralFoundation).WhereElementIsNotElementType().ToElements()
@@ -86,6 +93,56 @@ class CoordinateOptionsForm(WPFWindow):
         self.units_combo.SelectedIndex = 0
 
         self.load_logo()
+        
+    def UpdateBtn_Click(self, sender, e):
+        """Handle the manual update button click."""
+        import subprocess
+        git_exe = r"C:\Program Files\Git\bin\git.exe"
+        # Determine repo directory
+        repo_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
+        if "test_chalana.extension" in repo_dir and "testChalana" not in repo_dir:
+            repo_dir = os.path.join(repo_dir, "testChalana")
+
+        if not os.path.exists(git_exe):
+            show_custom_alert("Git executable not found at: {}".format(git_exe))
+            return
+
+        try:
+            forms.toast("Checking for updates...", title="Get Coordinates")
+            
+            # Fetch updates from origin
+            subprocess.call([git_exe, "-C", repo_dir, "fetch", "origin", "main"])
+            
+            # Check if we are behind
+            process = subprocess.Popen(
+                [git_exe, "-C", repo_dir, "status"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
+            )
+            stdout, _ = process.communicate()
+            
+            if "behind" in stdout:
+                res = forms.alert("A new update is available on GitHub. Would you like to update now?", 
+                                title="Update Found", 
+                                ok=True, cancel=True)
+                if res:
+                    # Pull latest changes
+                    pull_process = subprocess.Popen(
+                        [git_exe, "-C", repo_dir, "pull", "origin", "main"],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE
+                    )
+                    pull_out, pull_err = pull_process.communicate()
+                    
+                    if pull_process.returncode == 0:
+                        show_custom_alert("Successfully updated to the latest version!\n\nPlease restart the tool or reload pyRevit to apply changes.")
+                    else:
+                        show_custom_alert("Update failed:\n{}".format(pull_err))
+            else:
+                forms.toast("You are already using the latest version.", title="Up-to-Date")
+                
+        except Exception as ex:
+            show_custom_alert("Error during update: {}".format(str(ex)))
         
     def RunButton_Click(self, sender, args):
         self.selected_foundations = list(self.foundation_list.SelectedItems)
