@@ -122,22 +122,31 @@ class CoordinateOptionsForm(WPFWindow):
             stdout, _ = process.communicate()
             
             if "behind" in stdout:
-                res = forms.alert("A new update is available on GitHub. Would you like to update now?", 
-                                title="Update Found", 
-                                ok=True, cancel=True)
-                if res:
-                    # Pull latest changes
-                    pull_process = subprocess.Popen(
-                        [git_exe, "-C", repo_dir, "pull", "origin", "main"],
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE
-                    )
-                    pull_out, pull_err = pull_process.communicate()
-                    
-                    if pull_process.returncode == 0:
-                        show_custom_alert("Successfully updated to the latest version!\n\nPlease restart the tool or reload pyRevit to apply changes.")
-                    else:
-                        show_custom_alert("Update failed:\n{}".format(pull_err))
+                # Show custom update popup
+                xaml_file = os.path.join(os.path.dirname(__file__), "update_popup.xaml")
+                if os.path.exists(xaml_file):
+                    popup = UpdatePopupWindow(xaml_file)
+                    if popup.ShowDialog():
+                        # Pull latest changes
+                        pull_process = subprocess.Popen(
+                            [git_exe, "-C", repo_dir, "pull", "origin", "main"],
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE
+                        )
+                        pull_out, pull_err = pull_process.communicate()
+                        
+                        if pull_process.returncode == 0:
+                            show_custom_alert("Successfully updated to the latest version!\n\nPlease restart the tool or reload pyRevit to apply changes.")
+                        else:
+                            show_custom_alert("Update failed:\n{}".format(pull_err))
+                else:
+                    # Fallback to standard alert if xaml missing
+                    res = forms.alert("A new update is available on GitHub. Would you like to update now?", 
+                                    title="Update Found", 
+                                    ok=True, cancel=True)
+                    if res:
+                        subprocess.call([git_exe, "-C", repo_dir, "pull", "origin", "main"])
+                        show_custom_alert("Successfully updated to the latest version!")
             else:
                 forms.toast("You are already using the latest version.", title="Up-to-Date")
                 
@@ -212,6 +221,22 @@ def show_custom_alert(message):
             forms.alert(message)
     except:
         forms.alert(message)
+
+class UpdatePopupWindow(WPFWindow):
+    def __init__(self, xaml_file_name):
+        WPFWindow.__init__(self, xaml_file_name)
+
+    def TitleBar_MouseDown(self, sender, args):
+        if args.LeftButton == System.Windows.Input.MouseButtonState.Pressed:
+            self.DragMove()
+
+    def UpdateNow_Click(self, sender, args):
+        self.DialogResult = True
+        self.Close()
+
+    def CancelButton_Click(self, sender, args):
+        self.DialogResult = False
+        self.Close()
 
 def process_elements(selected_founds, selected_cols, is_survey_point, is_meters):
     t = DB.Transaction(doc, "Add Coordinates to Identity Data")
